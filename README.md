@@ -24,32 +24,49 @@ npm install @brickd/react @brickd/react-web @brickd/render
 ```
 ## Usage
 ```jsx
-import {createElement} from 'react';
-import {BrickDesign,BrickTree,BrickProvider,useSelector,createActions} from '@brickd/react';
-import {BrickPreview} from '@brickd/react-web';
+import { createElement } from 'react';
+import { BrickDesign, BrickTree, BrickProvider, useSelector, createActions,PROPS_TYPES } from '@brickd/react';
+import { BrickPreview } from '@brickd/react-web';
 import BrickRender from '@brickd/render';
-const plugins=[(vDom,componentConfig)=>vDom];
-const customReducer=(state,action)=>{
-const {type,payload}=action
-switch (type){
-case 'customReducer':
-return {...state}
-default:
-return state
+import * as Ants from 'antd/es';
+const divSchema = {
+   propsConfig:{
+      children:{
+         label: '文本内容',
+         type: PROPS_TYPES.string,
+      },
+      ...
+   }
 }
-
+const componentSchemasMap = {
+	'div':divSchema,
+     ...
+}
+ 
+const config = {
+   componentsMap:Ants,
+   componentSchemasMap
+}
+const plugins = [(vDom, componentSchema) => vDom];
+const customReducer = (state, action) => {
+  const { type, payload } = action
+  switch (type) {
+    case 'customReducer':
+      return { ...state }
+    default:
+      return state
+  }
 }
 const App = () => {
-const {componentConfigs}=useSelector(['componentConfigs'])
+  const { pageConfig } = useSelector(['pageConfig'])
 
-	return(<BrickProvider initState={{}} customReducer={customReducer} config={{...}}>
-<div onClick={()=>createActions({type:"customReducer",payload:{...}})}> 出发action</div>
-
-    <BrickPreview/>
+  return (<BrickProvider initState={{...}} customReducer={customReducer} config={config} warn={(msg) =>console.warning(msg)}
+  >
+    <div onClick={() => createActions({ type: "customReducer", payload: { ... } })}> 出发action</div>
+    <BrickPreview />
     <BrickDesign />
-<BrickRender componentConfigs={componentConfigs} createElement={createElement} plugins={plugins}/>
-<BrickTree/>
-
+    <BrickRender pageConfig={pageConfig} createElement={createElement} plugins={plugins} />
+    <BrickTree />
   </BrickProvider>);
 }
 ```

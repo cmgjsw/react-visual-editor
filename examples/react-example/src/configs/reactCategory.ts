@@ -1,4 +1,4 @@
-import { CategoryType } from '@brickd/react'
+import { CategoryType } from '@brickd/react-web'
 
 export const reactContainers: CategoryType = {
 	Layout: {
@@ -271,7 +271,6 @@ export const reactContainers: CategoryType = {
 }
 
 export const reactNonContainers: CategoryType = {
-	DemoChart: null,
 	Typography: {
 		components: {
 			'Typography.Text': null,
